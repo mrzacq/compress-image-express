@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const sharp = require("sharp");
+const { v4: uuid } = require("uuid");
 const app = express();
 
 const multerStorage = multer.memoryStorage();
@@ -27,20 +28,19 @@ app.post(
         req.files.images.forEach(async (file) => {
           const newFilename = `/uploads/${file.fieldname
             .split(" ")
-            .join("-")}-${Date.now()}.png`;
+            .join("-")}-${uuid()}.png`;
 
+          images.push(`http://localhost:3000${newFilename}`);
           await sharp(file.buffer)
             .resize({ width: 640, height: 320 })
             .toFormat("png")
             .png({ quality: 90 })
-            .toFile(`./${newFilename}`)
-            .then(() => {
-              images.push(`http://localhost:3000${newFilename}`);
-            });
+            .toFile(`./${newFilename}`);
         });
+        console.log(`images: ${images}`);
         res.status(200).json({
           message: "Sukses",
-          images,
+          images: images,
         });
       }
     } catch (error) {
