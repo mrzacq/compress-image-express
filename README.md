@@ -14,3 +14,6 @@ basic image compression using express js, multer, sharp
 7. Now you can see the result
 
 ![Result](browser.png)
+
+### notes
+1. don't use date.now instead date.now use uuid
